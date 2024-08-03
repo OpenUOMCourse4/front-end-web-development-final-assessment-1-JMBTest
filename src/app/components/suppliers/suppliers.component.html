@@ -1,0 +1,52 @@
+<div class="container-fluid main-content">
+    <div class="row">
+      <section
+        [ngClass]="showAddSupplier ? 'col-md-7' : 'col-md-12'"
+      >
+        <div class="supplier-header">
+          <h1>
+            Supplier List
+            <span *ngIf="!isLoading" (click)="refresh()" style="cursor: pointer">
+              <i class="fa fa-refresh" aria-hidden="true"></i>
+            </span>
+            <i
+              *ngIf="isLoading"
+              class="fa fa-refresh fa-spin fa-fw"
+              aria-hidden="true"
+            ></i>
+          </h1>
+          <button type="button" class="btn btn-outline-primary" (click)="showAddSupplierView()" id="supplier-add">Add Supplier</button>
+        </div>
+        <table class="table" id= "supplier-table">
+          <thead class="thead-light t-head">
+            <tr>
+              <th scope="col">Supplier Id</th>
+              <th scope="col">Supplier Name</th>
+              <th scope="col">Supplier Address</th>
+              <th scope="col">Joined Date</th>
+              <th scope="col">Mobile No</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let supplier of suppliers; let i = index"
+              (click)="selectSupplier(i, supplier)"
+              [ngClass]="rowIndex == i ? 'active' : ''"
+            >
+              <td>{{ supplier.id }}</td>
+              <td>{{ supplier.supplierName}}</td>
+              <td>{{ supplier.address | contentLimitter }}</td>
+              <td>{{ supplier.joinedDate|date }}</td>
+              <!--Task 2 -Complete the code here -->
+              <td>{{ supplier.mobileNo }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="col-md-5" *ngIf="showAddSupplier" id ="add-form">
+        <!--Task 5 Complete the code inside <app-add-supplier> tag -->
+          <app-add-supplier  (cancelAddView) = "hideAddSuppliers()" (supplierAddEvent) ="updateSupplierList()"></app-add-supplier>
+      </section>
+    </div>
+  </div>
+  

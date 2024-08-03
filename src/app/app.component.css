@@ -1,0 +1,20 @@
+.color{
+    background-color: rgb(78, 136, 78);
+}
+
+.bg-light{
+    background-color: cornflowerblue !important;
+} 
+
+.nav-header {
+    display: flex;
+    flex-direction: row;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+  }
+  
+  a{
+    color: rgba(44, 44, 44, 0.877);
+  }
+  

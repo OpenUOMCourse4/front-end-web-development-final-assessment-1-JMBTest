@@ -1,0 +1,90 @@
+name: Autograding Tests
+'on':
+- push
+- workflow_dispatch
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Angular CLI
+      run: npm install -g @angular/cli
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Install cypress-multi-reporters
+      run: npm install cypress-multi-reporters mocha-junit-reporter --save-dev
+
+    - name: Start the Angular application
+      run: npm start &
+      env:
+        CI: true
+
+    - name: View Supplier
+      id: viewSupplier
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: View Supplier
+        command: npx cypress run --spec cypress/e2e/1-view-supplier.cy.ts
+        timeout: 10
+        max-score: 10
+
+    - name: View Supplier Date Validation
+      id: viewSupplierDateValidation
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: View Supplier Date Validation
+        command: npx cypress run --spec cypress/e2e/2-view-supplier-date-validation.cy.ts
+        timeout: 10
+        max-score: 10
+
+    - name: Add Supplier Button Validation
+      id: addSupplierButtonValidation
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Add Supplier Button Validation
+        command: npx cypress run --spec cypress/e2e/3-add-supplier-button-validation.cy.ts
+        timeout: 10
+        max-score: 10
+
+    - name: Add Supplier Reset
+      id: addSupplierReset
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Add Supplier Reset
+        command: npx cypress run --spec cypress/e2e/4-add-supplier-reset.cy.ts
+        timeout: 10
+        max-score: 10
+
+    - name: Add Supplier
+      id: addSupplier
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Add Supplier
+        command: npx cypress run --spec cypress/e2e/5-add-supplier.cy.ts
+        timeout: 10
+        max-score: 10
+
+    # Add debugging steps to log outputs
+    - name: Log View Supplier Output
+      run: echo "${{ steps.viewSupplier.outputs.result }}"
+
+    - name: Autograding Reporter
+      uses: databoxtech/autograding-grading-reporter@main
+      env:
+        VIEWSUPPLIER_RESULTS: "${{steps.viewSupplier.outputs.result}}"
+        VIEWSUPPLIERDATEVALIDATION_RESULTS: "${{steps.viewSupplierDateValidation.outputs.result}}"
+        ADDSUPPLIERBUTTONVALIDATION_RESULTS: "${{steps.addSupplierButtonValidation.outputs.result}}"
+        ADDSUPPLIERRESET_RESULTS: "${{steps.addSupplierReset.outputs.result}}"
+        ADDSUPPLIER_RESULTS: "${{steps.addSupplier.outputs.result}}"
+      with:
+        runners: viewSupplier,viewSupplierDateValidation,addSupplierButtonValidation,addSupplierReset,addSupplier

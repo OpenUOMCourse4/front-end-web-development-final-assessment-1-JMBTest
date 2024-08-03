@@ -1,0 +1,92 @@
+<div class="add-product-section mt-3">
+  <div class="box-head">
+    <h1 class="pr-name">Add a supplier</h1>
+    <button type="button" class="btn btn-light" (click)="cancel()" id="add-supplier-close">X</button>
+  </div>
+  <form [formGroup]="supplierFrom" (ngSubmit)="onSubmit()" class="row g-3">
+    <div class="form-group">
+      <label class="form-label">Supplier Name</label>
+      <input type="text" class="form-control" formControlName="supplierName" id ="supplier-name"/>
+      <div
+        *ngIf="
+          f['supplierName'].touched &&
+          f['supplierName'].invalid &&
+          f['supplierName'].errors &&
+          f['supplierName'].errors['required']
+        "
+        class="error"
+      >
+        Supplier name is required.
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Supplier Address</label>
+      <input type="text" class="form-control" formControlName="address" id ="supplier-address"/>
+      <div
+        *ngIf="
+          f['address'].touched &&
+          f['address'].invalid &&
+          f['address'].errors &&
+          f['address'].errors['required']
+        "
+        class="error"
+      >
+        Supplier Address is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-label">Joined Date</label>
+          <input
+            type="date"
+            class="form-control"
+            formControlName="joinedDate"
+            id ="supplier-joined-date"
+          />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Mobile No</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="mobileNo"
+            id ="supplier-mobile-no"
+          />
+          <div id="mobile-number-error"
+            *ngIf="f['mobileNo'].errors && f['mobileNo'].errors['pattern']"
+            class="error"
+          >
+            Only numbers are allowed.
+          </div>
+          <div id="mobile-number-digit-count-error"
+            *ngIf="f['mobileNo'].errors && f['mobileNo'].errors['minlength']"
+            class="error"
+          >
+            Please, Enter 10 digit Mobile Number.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 text-end mt-5">
+      <button type="button" class="btn btn btn-outline-secondary me-2">
+        cancel
+      </button>
+      <!--Task 3 Complete the code inside <button> tag-->
+        <button
+        type="submit"
+        [disabled]="!supplierFrom.valid"
+        class="btn btn-outline-primary"
+        id ="supplier-submit"
+      >
+
+        Submit<i
+          *ngIf="isDataUploading"
+          class="fa fa-spinner fa-pulse fa-fw"
+        ></i>
+      </button>
+    </div>
+  </form>
+</div>
